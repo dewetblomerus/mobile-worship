@@ -29,6 +29,14 @@ defmodule MobileWorshipWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/auth", MobileWorshipWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    delete "/logout", AuthController, :delete
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", MobileWorshipWeb do
   #   pipe_through :api

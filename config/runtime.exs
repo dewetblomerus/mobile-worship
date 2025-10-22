@@ -7,6 +7,11 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 
+if config_env() != :test do
+  config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
+    client_secret: System.fetch_env!("AUTH0_CLIENT_SECRET")
+end
+
 # ## Using releases
 #
 # If you use `mix release`, you need to explicitly enable the server

@@ -19,3 +19,7 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+
+config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
+  client_id: "rbF9mpIRedsTpHlPMxAxrYO4EBSezQlG",
+  domain: "mobileworship.us.auth0.com"
