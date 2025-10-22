@@ -63,6 +63,7 @@ defmodule MobileWorship.MixProject do
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
+      {:ueberauth_auth0, "~> 2.1"},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.2.0",
