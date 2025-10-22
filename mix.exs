@@ -58,6 +58,7 @@ defmodule MobileWorship.MixProject do
       {:phoenix, "~> 1.8.1"},
       {:postgrex, ">= 0.0.0"},
       {:req, "~> 0.5"},
+      {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.16"},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
