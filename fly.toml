@@ -6,6 +6,7 @@
 app = 'mobileworship'
 primary_region = 'iad'
 kill_signal = 'SIGTERM'
+swap_size_mb = 512
 
 [build]
 
