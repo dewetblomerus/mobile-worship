@@ -2,8 +2,9 @@ defmodule MobileWorshipWeb.AuthController do
   use MobileWorshipWeb, :controller
   plug Ueberauth
 
+  alias MobileWorship.Accounts
+
   def request(conn, _params) do
-    # This is handled by Ueberauth
     conn
   end
 
@@ -14,16 +15,18 @@ defmodule MobileWorshipWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    # Here you would typically:
-    # 1. Find or create a user based on auth.uid
-    # 2. Store user info in session
-    # 3. Redirect to the appropriate page
+    case Accounts.upsert_with_auth0(auth) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Successfully authenticated as #{user.email}!")
+        |> put_session(:user_id, user.id)
+        |> redirect(to: ~p"/")
 
-    conn
-    |> put_flash(:info, "Successfully authenticated as #{auth.info.email}!")
-    |> put_session(:user_id, auth.uid)
-    |> put_session(:user_email, auth.info.email)
-    |> redirect(to: ~p"/")
+      {:error, _reason} ->
+        conn
+        |> put_flash(:error, "Failed to create or update user.")
+        |> redirect(to: ~p"/")
+    end
   end
 
   def delete(conn, _params) do

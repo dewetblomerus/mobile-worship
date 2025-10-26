@@ -5,10 +5,6 @@ defmodule MobileWorshipWeb.Layouts do
   """
   use MobileWorshipWeb, :html
 
-  # Embed all files in layouts/* within this module.
-  # The default root.html.heex file contains the HTML
-  # skeleton of your application, namely HTML headers
-  # and other static content.
   embed_templates "layouts/*"
 
   @doc """
@@ -31,6 +27,8 @@ defmodule MobileWorshipWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
 
+  attr :current_user, :map, default: nil, doc: "the current user"
+
   slot :inner_block, required: true
 
   def app(assigns) do
@@ -39,24 +37,28 @@ defmodule MobileWorshipWeb.Layouts do
       <div class="flex-1">
         <a href="/" class="flex-1 flex w-fit items-center gap-2">
           <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
+          <span class="text-sm font-semibold">MobileWorship</span>
         </a>
       </div>
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
           <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
             <.theme_toggle />
           </li>
           <li>
-            <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
+            <%= if @current_user do %>
+              <form method="post" action={~p"/auth/logout"}>
+                <input type="hidden" name="_csrf_token" value={get_csrf_token()} />
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" class="btn btn-ghost">
+                  Logout
+                </button>
+              </form>
+            <% else %>
+              <a href={~p"/auth/auth0"} class="btn btn-primary">
+                Login
+              </a>
+            <% end %>
           </li>
         </ul>
       </div>
