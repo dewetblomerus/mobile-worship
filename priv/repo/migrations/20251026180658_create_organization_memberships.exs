@@ -15,7 +15,7 @@ defmodule MobileWorship.Repo.Migrations.CreateOrganizationMemberships do
     create unique_index(:organization_memberships, [:user_id, :organization_id])
 
     create constraint(:organization_memberships, :role_must_be_valid,
-      check: "role IN ('owner', 'editor', 'viewer')"
-    )
+             check: "role IN ('owner', 'editor', 'viewer')"
+           )
   end
 end

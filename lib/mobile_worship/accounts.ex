@@ -6,8 +6,8 @@ defmodule MobileWorship.Accounts do
   import Ecto.Query, warn: false
   alias MobileWorship.Repo
 
-  alias MobileWorship.Accounts.User
   alias MobileWorship.Accounts.OrganizationMembership
+  alias MobileWorship.Accounts.User
 
   def get_user(id), do: Repo.get(User, id)
 
@@ -26,10 +26,10 @@ defmodule MobileWorship.Accounts do
 
   def upsert_with_auth0(auth0_user) do
     Repo.transaction(fn ->
-      email_verified = 
+      email_verified =
         get_in(auth0_user.extra.raw_info.user, ["email_verified"]) ||
-        get_in(auth0_user.extra.raw_info, ["email_verified"]) ||
-        false
+          get_in(auth0_user.extra.raw_info, ["email_verified"]) ||
+          false
 
       user_attrs = %{
         auth0_id: auth0_user.uid,

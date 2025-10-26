@@ -1,4 +1,8 @@
 defmodule MobileWorship.Accounts.OrganizationMembership do
+  @moduledoc """
+  Schema for organization memberships.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

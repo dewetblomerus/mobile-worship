@@ -1,4 +1,8 @@
 defmodule MobileWorshipWeb.Plugs.LoadCurrentUser do
+  @moduledoc """
+  Plug to load the current user from the session.
+  """
+
   import Plug.Conn
   alias MobileWorship.Accounts
 
