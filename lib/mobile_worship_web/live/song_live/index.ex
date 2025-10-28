@@ -7,9 +7,9 @@ defmodule MobileWorshipWeb.SongLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={@current_user}>
       <.header>
-        Listing Songs
+        Songs
         <:actions>
           <.button variant="primary" navigate={~p"/songs/new"}>
             <.icon name="hero-plus" /> New Song
