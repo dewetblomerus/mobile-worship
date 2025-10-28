@@ -1,9 +1,9 @@
 defmodule MobileWorshipWeb.SongLive.Form do
   use MobileWorshipWeb, :live_view
 
+  alias MobileWorship.Accounts
   alias MobileWorship.Content
   alias MobileWorship.Content.Song
-  alias MobileWorship.Accounts
 
   @impl true
   def render(assigns) do

@@ -1,4 +1,8 @@
 defmodule MobileWorship.Content.Song do
+  @moduledoc """
+  Schema for songs.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
