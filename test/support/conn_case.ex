@@ -35,4 +35,18 @@ defmodule MobileWorshipWeb.ConnCase do
     MobileWorship.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
+
+  @doc """
+  Setup helper that logs in a user for tests.
+
+  ## Examples
+
+      setup :log_in_user
+
+  """
+  def log_in_user(%{conn: conn}) do
+    user = MobileWorship.AccountsFixtures.user_fixture()
+    conn = Plug.Test.init_test_session(conn, user_id: user.id)
+    %{conn: conn, user: user}
+  end
 end

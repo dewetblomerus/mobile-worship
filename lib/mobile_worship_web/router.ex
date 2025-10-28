@@ -29,6 +29,11 @@ defmodule MobileWorshipWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/songs", SongLive.Index, :index
+    live "/songs/new", SongLive.Form, :new
+    live "/songs/:id", SongLive.Show, :show
+    live "/songs/:id/edit", SongLive.Form, :edit
   end
 
   scope "/auth", MobileWorshipWeb do

@@ -52,6 +52,8 @@ defmodule MobileWorshipWeb do
     quote do
       use Phoenix.LiveView
 
+      on_mount MobileWorshipWeb.Hooks.LoadCurrentUser
+
       unquote(html_helpers())
     end
   end

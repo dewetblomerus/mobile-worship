@@ -11,6 +11,7 @@ defmodule MobileWorship.Organizations.Organization do
 
     has_many :organization_memberships, MobileWorship.Accounts.OrganizationMembership
     has_many :users, through: [:organization_memberships, :user]
+    has_many :songs, MobileWorship.Content.Song
 
     timestamps(type: :utc_datetime)
   end

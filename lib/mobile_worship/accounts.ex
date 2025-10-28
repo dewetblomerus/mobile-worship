@@ -24,6 +24,17 @@ defmodule MobileWorship.Accounts do
     user.organizations
   end
 
+  def get_personal_organization(user_id) do
+    from(om in OrganizationMembership,
+      join: o in assoc(om, :organization),
+      where: om.user_id == ^user_id,
+      select: o,
+      order_by: [asc: om.inserted_at],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
   def upsert_with_auth0(auth0_user) do
     Repo.transaction(fn ->
       email_verified =

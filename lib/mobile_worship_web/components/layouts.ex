@@ -42,6 +42,13 @@ defmodule MobileWorshipWeb.Layouts do
       </div>
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
+          <%= if @current_user do %>
+            <li>
+              <a href={~p"/songs"} class="btn btn-ghost">
+                Songs
+              </a>
+            </li>
+          <% end %>
           <li>
             <.theme_toggle />
           </li>

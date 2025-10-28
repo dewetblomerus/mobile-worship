@@ -15,6 +15,7 @@ defmodule MobileWorship.Accounts.User do
 
     has_many :organization_memberships, MobileWorship.Accounts.OrganizationMembership
     has_many :organizations, through: [:organization_memberships, :organization]
+    has_many :created_songs, MobileWorship.Content.Song, foreign_key: :created_by_id
 
     timestamps(type: :utc_datetime)
   end
