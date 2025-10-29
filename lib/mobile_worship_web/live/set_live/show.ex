@@ -18,6 +18,9 @@ defmodule MobileWorshipWeb.SetLive.Show do
           <.button variant="primary" navigate={~p"/sets/#{@set}/edit?return_to=show"}>
             <.icon name="hero-pencil-square" /> Edit set
           </.button>
+          <.button navigate={~p"/sets/#{@set.id}/present"}>
+            <.icon name="hero-presentation-chart-bar" /> Present
+          </.button>
         </:actions>
       </.header>
 

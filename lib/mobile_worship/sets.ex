@@ -110,4 +110,50 @@ defmodule MobileWorship.Sets do
   def change_set(%Set{} = set, attrs \\ %{}) do
     Set.changeset(set, attrs)
   end
+
+  @doc """
+  Returns all parts from all songs in a set, flattened into a single list.
+
+  Each part is represented as a map with the song name and part content.
+
+  ## Examples
+
+      iex> get_set_parts(set, organization_id)
+      [%{song_name: "Song 1", content: "Verse 1..."}, ...]
+
+  """
+  def get_set_parts(%Set{} = set, organization_id) do
+    alias MobileWorship.Content.Song
+
+    if is_nil(set.song_ids) or set.song_ids == [] do
+      []
+    else
+      songs =
+        Song
+        |> where([s], s.id in ^set.song_ids and s.organization_id == ^organization_id)
+        |> Repo.all()
+
+      song_map = Map.new(songs, fn song -> {song.id, song} end)
+
+      set.song_ids
+      |> Enum.flat_map(fn song_id -> get_song_parts(song_map, song_id) end)
+    end
+  end
+
+  defp get_song_parts(song_map, song_id) do
+    case Map.get(song_map, song_id) do
+      nil ->
+        []
+
+      song ->
+        parts = song.parts || []
+
+        Enum.map(parts, fn part ->
+          %{
+            song_name: song.name,
+            content: part
+          }
+        end)
+    end
+  end
 end
