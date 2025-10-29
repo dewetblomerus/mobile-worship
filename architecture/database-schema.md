@@ -47,7 +47,7 @@ erDiagram
     }
 
     sets {
-        bigint id PK
+        uuid id PK
         bigint created_by_id FK "not null, references users"
         string name "not null"
         bigint organization_id FK "not null, references organizations"

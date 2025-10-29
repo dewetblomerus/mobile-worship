@@ -2,7 +2,8 @@ defmodule MobileWorship.Repo.Migrations.CreateSets do
   use Ecto.Migration
 
   def change do
-    create table(:sets) do
+    create table(:sets, primary_key: false) do
+      add :id, :uuid, primary_key: true, default: fragment("gen_random_uuid()")
       add :name, :string, null: false
       add :song_ids, {:array, :integer}, default: []
       add :organization_id, references(:organizations, on_delete: :delete_all), null: false
