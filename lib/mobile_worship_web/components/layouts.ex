@@ -48,6 +48,11 @@ defmodule MobileWorshipWeb.Layouts do
                 Songs
               </a>
             </li>
+            <li>
+              <a href={~p"/sets"} class="btn btn-ghost">
+                Sets
+              </a>
+            </li>
           <% end %>
           <li>
             <.theme_toggle />

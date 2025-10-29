@@ -34,6 +34,11 @@ defmodule MobileWorshipWeb.Router do
     live "/songs/new", SongLive.Form, :new
     live "/songs/:id", SongLive.Show, :show
     live "/songs/:id/edit", SongLive.Form, :edit
+
+    live "/sets", SetLive.Index, :index
+    live "/sets/new", SetLive.Form, :new
+    live "/sets/:id", SetLive.Show, :show
+    live "/sets/:id/edit", SetLive.Form, :edit
   end
 
   scope "/auth", MobileWorshipWeb do

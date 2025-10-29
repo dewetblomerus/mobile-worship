@@ -24,12 +24,32 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/mobile_worship"
 import topbar from "../vendor/topbar"
+import Sortable from "sortablejs"
+
+const Hooks = {}
+
+Hooks.Sortable = {
+  mounted() {
+    const group = this.el.dataset.group
+    const sortable = new Sortable(this.el, {
+      animation: 150,
+      dragClass: "opacity-50",
+      ghostClass: "opacity-25",
+      onEnd: (evt) => {
+        this.pushEvent("reorder", {
+          old_index: evt.oldIndex,
+          new_index: evt.newIndex
+        })
+      }
+    })
+  }
+}
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {...colocatedHooks, ...Hooks},
 })
 
 // Show progress bar on live navigation and form submits
