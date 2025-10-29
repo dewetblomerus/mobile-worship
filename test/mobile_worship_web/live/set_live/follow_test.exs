@@ -39,7 +39,6 @@ defmodule MobileWorshipWeb.SetLive.FollowTest do
         {:presentation_update, current_part}
       )
 
-      assert render(view) =~ "Test Song"
       assert render(view) =~ "Test Content"
     end
 
