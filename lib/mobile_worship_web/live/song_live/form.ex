@@ -21,6 +21,7 @@ defmodule MobileWorshipWeb.SongLive.Form do
           type="textarea"
           label="Parts (one per line)"
           phx-debounce="300"
+          rows="32"
         />
         <footer>
           <.button phx-disable-with="Saving..." variant="primary">Save Song</.button>
