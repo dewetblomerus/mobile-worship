@@ -45,6 +45,24 @@ defmodule MobileWorship.Sets do
   end
 
   @doc """
+  Gets a single set by ID without organization check.
+
+  Raises `Ecto.NoResultsError` if the Set does not exist.
+
+  ## Examples
+
+      iex> get_set_by_id!(123)
+      %Set{}
+
+      iex> get_set_by_id!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_set_by_id!(id) do
+    Repo.get!(Set, id)
+  end
+
+  @doc """
   Creates a set.
 
   ## Examples

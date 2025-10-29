@@ -157,9 +157,19 @@ defmodule MobileWorshipWeb.SetLive.Present do
         do: Enum.at(all_parts, current_index + 1),
         else: nil
 
+    broadcast_presentation_update(socket.assigns.set.id, current_part)
+
     socket
     |> assign(:current_part, current_part)
     |> assign(:prev_part, prev_part)
     |> assign(:next_part, next_part)
+  end
+
+  defp broadcast_presentation_update(set_id, part) do
+    Phoenix.PubSub.broadcast(
+      MobileWorship.PubSub,
+      "set:#{set_id}:presentation",
+      {:presentation_update, part}
+    )
   end
 end

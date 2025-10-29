@@ -21,6 +21,9 @@ defmodule MobileWorshipWeb.SetLive.Show do
           <.button navigate={~p"/sets/#{@set.id}/present"}>
             <.icon name="hero-presentation-chart-bar" /> Present
           </.button>
+          <.button navigate={~p"/sets/#{@set.id}/follow"}>
+            <.icon name="hero-eye" /> Follow
+          </.button>
         </:actions>
       </.header>
 

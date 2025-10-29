@@ -40,6 +40,7 @@ defmodule MobileWorshipWeb.Router do
     live "/sets/:id", SetLive.Show, :show
     live "/sets/:id/edit", SetLive.Form, :edit
     live "/sets/:set_id/present", SetLive.Present, :present
+    live "/sets/:id/follow", SetLive.Follow, :follow
   end
 
   scope "/auth", MobileWorshipWeb do
