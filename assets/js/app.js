@@ -24,7 +24,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/mobile_worship"
 import topbar from "../vendor/topbar"
-import Sortable from "sortablejs"
+import Sortable from "../vendor/sortable.min.js"
 
 const Hooks = {}
 
@@ -100,4 +100,3 @@ if (process.env.NODE_ENV === "development") {
     window.liveReloader = reloader
   })
 }
-
