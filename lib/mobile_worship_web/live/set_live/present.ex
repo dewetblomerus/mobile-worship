@@ -40,8 +40,10 @@ defmodule MobileWorshipWeb.SetLive.Present do
                   {@current_part.song_name}
                 </div>
                 <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex flex-col items-center justify-center border-4 border-primary">
-                  <div class="text-5xl leading-relaxed text-center">
-                    {@current_part.content}
+                  <div class="flex flex-col items-center justify-center ">
+                    <div class="text-5xl leading-relaxed text-center">
+                      {@current_part.content}
+                    </div>
                   </div>
                 </div>
               <% else %>
