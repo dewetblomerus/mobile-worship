@@ -61,6 +61,9 @@ config :mobile_worship, MobileWorshipWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/mobile_worship_web/(?:controllers|live|components|router)/?.*\.(ex|heex)$"
     ]
+  ],
+  http: [
+    ip: {0, 0, 0, 0}
   ]
 
 # Enable dev routes for dashboard and mailbox
