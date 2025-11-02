@@ -8,16 +8,10 @@ defmodule MobileWorshipWeb.SetLive.Follow do
   def render(assigns) do
     ~H"""
     <div class="min-h-screen bg-black text-white flex items-center justify-center p-8">
-      <div class="text-center max-w-4xl w-full">
-        <%= if @current_part do %>
-          <div class="text-5xl whitespace-pre-wrap leading-relaxed">
-            {@current_part.content}
-          </div>
-        <% else %>
-          <div class="text-5xl font-bold">
-            {@set_name}
-          </div>
-        <% end %>
+      <div class="max-w-4xl w-full flex flex-col items-center justify-center">
+        <div class="text-5xl leading-relaxed text-center">
+          {@current_part.content}
+        </div>
       </div>
     </div>
     """
@@ -26,10 +20,7 @@ defmodule MobileWorshipWeb.SetLive.Follow do
   @impl true
   def mount(%{"id" => set_id}, _session, socket) do
     # Try to get current part from cache first
-    current_part = PresentationCache.get_current_part(set_id)
-
-    # Fetch set (needed for the set name fallback)
-    set = Sets.get_set_by_id!(set_id)
+    current_part = PresentationCache.get_current_part(set_id) || build_fallback_content(set_id)
 
     if connected?(socket) do
       Phoenix.PubSub.subscribe(MobileWorship.PubSub, "set:#{set_id}:presentation")
@@ -38,12 +29,16 @@ defmodule MobileWorshipWeb.SetLive.Follow do
     {:ok,
      socket
      |> assign(:set_id, set_id)
-     |> assign(:set_name, set.name)
      |> assign(:current_part, current_part)}
   end
 
   @impl true
   def handle_info({:presentation_update, part}, socket) do
-    {:noreply, assign(socket, :current_part, part)}
+    current_part = part || build_fallback_content(socket.assigns.set_id)
+    {:noreply, assign(socket, :current_part, current_part)}
+  end
+
+  defp build_fallback_content(set_id) do
+    %{content: Sets.get_set_by_id!(set_id).name}
   end
 end

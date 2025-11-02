@@ -39,9 +39,11 @@ defmodule MobileWorshipWeb.SetLive.Present do
                 <div class="text-xl font-bold mb-4">
                   {@current_part.song_name}
                 </div>
-                <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex items-center justify-center border-4 border-primary">
-                  <div class="text-center text-lg whitespace-pre-wrap overflow-y-auto max-h-full">
-                    {@current_part.content}
+                <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex flex-col items-center justify-center border-4 border-primary">
+                  <div class="flex flex-col items-center justify-center ">
+                    <div class="text-5xl leading-relaxed text-center">
+                      {@current_part.content}
+                    </div>
                   </div>
                 </div>
               <% else %>
