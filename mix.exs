@@ -50,6 +50,7 @@ defmodule MobileWorship.MixProject do
       {:jason, "~> 1.2"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.4", only: [:dev, :test], runtime: false},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
