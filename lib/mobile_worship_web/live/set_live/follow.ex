@@ -1,6 +1,7 @@
 defmodule MobileWorshipWeb.SetLive.Follow do
   use MobileWorshipWeb, :live_view
 
+  alias MobileWorship.PresentationCache
   alias MobileWorship.Sets
 
   @impl true
@@ -24,6 +25,10 @@ defmodule MobileWorshipWeb.SetLive.Follow do
 
   @impl true
   def mount(%{"id" => set_id}, _session, socket) do
+    # Try to get current part from cache first
+    current_part = PresentationCache.get_current_part(set_id)
+
+    # Fetch set (needed for the set name fallback)
     set = Sets.get_set_by_id!(set_id)
 
     if connected?(socket) do
@@ -34,7 +39,7 @@ defmodule MobileWorshipWeb.SetLive.Follow do
      socket
      |> assign(:set_id, set_id)
      |> assign(:set_name, set.name)
-     |> assign(:current_part, nil)}
+     |> assign(:current_part, current_part)}
   end
 
   @impl true

@@ -12,6 +12,7 @@ defmodule MobileWorship.Application do
       MobileWorship.Repo,
       {DNSCluster, query: Application.get_env(:mobile_worship, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: MobileWorship.PubSub},
+      MobileWorship.PresentationCache,
       # Start a worker by calling: MobileWorship.Worker.start_link(arg)
       # {MobileWorship.Worker, arg},
       # Start to serve requests, typically the last entry

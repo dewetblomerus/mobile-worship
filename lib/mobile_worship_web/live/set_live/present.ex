@@ -2,6 +2,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
   use MobileWorshipWeb, :live_view
 
   alias MobileWorship.Accounts
+  alias MobileWorship.PresentationCache
   alias MobileWorship.Sets
 
   @impl true
@@ -166,6 +167,9 @@ defmodule MobileWorshipWeb.SetLive.Present do
   end
 
   defp broadcast_presentation_update(set_id, part) do
+    # Cache the current part in ETS
+    PresentationCache.put_current_part(set_id, part)
+
     Phoenix.PubSub.broadcast(
       MobileWorship.PubSub,
       "set:#{set_id}:presentation",
