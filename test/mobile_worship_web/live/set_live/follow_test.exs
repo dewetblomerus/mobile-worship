@@ -7,6 +7,7 @@ defmodule MobileWorshipWeb.SetLive.FollowTest do
   import MobileWorship.SetsFixtures
 
   alias MobileWorship.Accounts
+  alias MobileWorship.PresentationCache
 
   setup do
     user = user_fixture()
@@ -26,6 +27,27 @@ defmodule MobileWorshipWeb.SetLive.FollowTest do
 
       assert html =~ set.name
       refute html =~ "Verse 1"
+    end
+
+    test "shows cached part from ETS when presentation is already active", %{set: set} do
+      # Simulate presenter caching a part in ETS
+      cached_part = %{song_name: "Cached Song", content: "Cached Content"}
+      PresentationCache.put_current_part(set.id, cached_part)
+
+      # When a new viewer joins, they should immediately see the cached part
+      {:ok, _view, html} = live(build_conn(), ~p"/sets/#{set.id}/follow")
+
+      assert html =~ "Cached Content"
+      refute html =~ set.name
+    end
+
+    test "shows set name when cache is empty", %{set: set} do
+      # Ensure cache is empty
+      PresentationCache.clear_current_part(set.id)
+
+      {:ok, _view, html} = live(build_conn(), ~p"/sets/#{set.id}/follow")
+
+      assert html =~ set.name
     end
 
     test "updates to show current part when presentation is active", %{set: set} do
