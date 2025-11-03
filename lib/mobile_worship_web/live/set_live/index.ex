@@ -28,7 +28,10 @@ defmodule MobileWorshipWeb.SetLive.Index do
           <div class="sr-only">
             <.link navigate={~p"/sets/#{set}"}>Show</.link>
           </div>
-          <.link navigate={~p"/sets/#{set.id}/present"} class="text-primary flex items-center gap-1 whitespace-nowrap">
+          <.link
+            navigate={~p"/sets/#{set.id}/present"}
+            class="text-primary flex items-center gap-1 whitespace-nowrap"
+          >
             <.icon name="hero-presentation-chart-bar" /> Present
           </.link>
           <.link navigate={~p"/sets/#{set}/edit"}>Edit</.link>
