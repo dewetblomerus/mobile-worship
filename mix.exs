@@ -58,6 +58,7 @@ defmodule MobileWorship.MixProject do
       {:phoenix_live_view, "~> 1.1.0"},
       {:phoenix, "~> 1.8.1"},
       {:postgrex, ">= 0.0.0"},
+      {:qr_code, "~> 3.2"},
       {:req, "~> 0.5"},
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.16"},
