@@ -3,6 +3,7 @@ defmodule MobileWorshipWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Guides &amp; Docs"
+    assert html_response(conn, 200) =~ "Songs"
+    assert html_response(conn, 200) =~ "Sets"
   end
 end
