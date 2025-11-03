@@ -9,7 +9,7 @@ defmodule MobileWorshipWeb.SetLive.Follow do
     ~H"""
     <div class="min-h-screen bg-black text-white flex items-center justify-center p-8">
       <div class="max-w-4xl w-full flex flex-col items-center justify-center">
-        <div class="text-5xl leading-relaxed text-center">
+        <div class="text-7xl leading-relaxed text-center">
           {@current_part.content}
         </div>
       </div>
