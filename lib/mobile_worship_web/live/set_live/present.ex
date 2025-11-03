@@ -35,9 +35,9 @@ defmodule MobileWorshipWeb.SetLive.Present do
             </.link>
           </div>
 
-          <div class="flex gap-8">
+          <div class="relative">
             <%!-- Song List Sidebar --%>
-            <div class="w-40 flex-shrink-0">
+            <div class="absolute left-0 top-0 w-40 flex-shrink-0">
               <div class="card bg-base-100 shadow-xl">
                 <div class="card-body p-4">
                   <h2 class="card-title text-lg mb-2">Songs</h2>
@@ -51,7 +51,9 @@ defmodule MobileWorshipWeb.SetLive.Present do
                           @current_song_index == idx && "active bg-primary text-primary-content"
                         ]}
                       >
-                        {song.name}
+                        {if String.length(song.name) > 12,
+                          do: String.slice(song.name, 0, 12) <> "...",
+                          else: song.name}
                       </a>
                     </li>
                   </ul>
@@ -60,7 +62,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
             </div>
 
             <%!-- Slides Display --%>
-            <div class="flex-1 flex flex-col items-center">
+            <div class="flex flex-col items-center">
               <div class="flex items-center justify-center gap-8">
                 <div class="flex flex-col items-center">
                   <%= if @prev_part do %>
