@@ -37,7 +37,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
 
           <div class="flex gap-8">
             <%!-- Song List Sidebar --%>
-            <div class="w-64 flex-shrink-0">
+            <div class="w-40 flex-shrink-0">
               <div class="card bg-base-100 shadow-xl">
                 <div class="card-body p-4">
                   <h2 class="card-title text-lg mb-2">Songs</h2>
