@@ -42,7 +42,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
                   {@prev_part.song_name}
                 </div>
                 <div class="w-48 h-96 bg-base-100 rounded-lg shadow-lg p-6 flex items-center justify-center opacity-60">
-                  <div class="text-center text-sm whitespace-pre-wrap overflow-y-auto max-h-full">
+                  <div class="text-3xl leading-relaxed text-center">
                     {@prev_part.content}
                   </div>
                 </div>
@@ -76,7 +76,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
                   {@next_part.song_name}
                 </div>
                 <div class="w-48 h-96 bg-base-100 rounded-lg shadow-lg p-6 flex items-center justify-center opacity-60">
-                  <div class="text-center text-sm whitespace-pre-wrap overflow-y-auto max-h-full">
+                  <div class="text-3xl leading-relaxed text-center">
                     {@next_part.content}
                   </div>
                 </div>
