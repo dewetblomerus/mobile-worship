@@ -117,6 +117,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
       organization = Accounts.get_personal_organization(socket.assigns.current_user.id)
       set = Sets.get_set!(set_id, organization.id)
 
+      songs = Sets.get_set_songs(set, organization.id)
       all_parts = Sets.get_set_parts(set, organization.id)
 
       follow_url = url(~p"/sets/#{set}/follow")
@@ -134,6 +135,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
       {:ok,
        socket
        |> assign(:set, set)
+       |> assign(:songs, songs)
        |> assign(:all_parts, all_parts)
        |> assign(:current_index, 0)
        |> assign(:total_parts, length(all_parts))
@@ -191,12 +193,30 @@ defmodule MobileWorshipWeb.SetLive.Present do
         do: Enum.at(all_parts, current_index + 1),
         else: nil
 
+    # Calculate which song we're currently in based on the current part index
+    current_song_index = calculate_current_song_index(socket.assigns.songs, current_index)
+
     broadcast_presentation_update(socket.assigns.set.id, current_part)
 
     socket
     |> assign(:current_part, current_part)
     |> assign(:prev_part, prev_part)
     |> assign(:next_part, next_part)
+    |> assign(:current_song_index, current_song_index)
+  end
+
+  defp calculate_current_song_index(songs, part_index) do
+    songs
+    |> Enum.with_index()
+    |> Enum.reduce_while(0, fn {song, song_idx}, acc_parts ->
+      parts_count = length(song.parts)
+
+      if part_index < acc_parts + parts_count do
+        {:halt, song_idx}
+      else
+        {:cont, acc_parts + parts_count}
+      end
+    end)
   end
 
   defp broadcast_presentation_update(set_id, part) do
