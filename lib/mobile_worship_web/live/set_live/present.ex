@@ -118,7 +118,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
       set = Sets.get_set!(set_id, organization.id)
 
       songs = Sets.get_set_songs(set, organization.id)
-      all_parts = Sets.get_set_parts(set, organization.id)
+      total_parts = Enum.reduce(songs, 0, fn song, acc -> acc + length(song.parts) end)
 
       follow_url = url(~p"/sets/#{set}/follow")
 
@@ -136,9 +136,9 @@ defmodule MobileWorshipWeb.SetLive.Present do
        socket
        |> assign(:set, set)
        |> assign(:songs, songs)
-       |> assign(:all_parts, all_parts)
-       |> assign(:current_index, 0)
-       |> assign(:total_parts, length(all_parts))
+       |> assign(:current_song_index, 0)
+       |> assign(:current_part_index, 0)
+       |> assign(:total_parts, total_parts)
        |> assign(:follow_url, follow_url)
        |> assign(:qr_svg_base64, qr_svg_base64)
        |> update_display()}
@@ -152,21 +152,11 @@ defmodule MobileWorshipWeb.SetLive.Present do
 
   @impl true
   def handle_event("next", _params, socket) do
-    new_index = min(socket.assigns.current_index + 1, socket.assigns.total_parts - 1)
-
-    {:noreply,
-     socket
-     |> assign(:current_index, new_index)
-     |> update_display()}
+    {:noreply, socket |> navigate_next() |> update_display()}
   end
 
   def handle_event("prev", _params, socket) do
-    new_index = max(socket.assigns.current_index - 1, 0)
-
-    {:noreply,
-     socket
-     |> assign(:current_index, new_index)
-     |> update_display()}
+    {:noreply, socket |> navigate_prev() |> update_display()}
   end
 
   def handle_event("keydown", %{"key" => key}, socket) when key in ["ArrowRight", " "] do
@@ -181,20 +171,63 @@ defmodule MobileWorshipWeb.SetLive.Present do
     {:noreply, socket}
   end
 
+  defp navigate_next(socket) do
+    songs = socket.assigns.songs
+    current_song_index = socket.assigns.current_song_index
+    current_part_index = socket.assigns.current_part_index
+
+    current_song = Enum.at(songs, current_song_index)
+
+    if current_song && current_part_index < length(current_song.parts) - 1 do
+      # Move to next part in current song
+      assign(socket, :current_part_index, current_part_index + 1)
+    else
+      # Move to first part of next song
+      if current_song_index < length(songs) - 1 do
+        socket
+        |> assign(:current_song_index, current_song_index + 1)
+        |> assign(:current_part_index, 0)
+      else
+        # Already at the end
+        socket
+      end
+    end
+  end
+
+  defp navigate_prev(socket) do
+    songs = socket.assigns.songs
+    current_song_index = socket.assigns.current_song_index
+    current_part_index = socket.assigns.current_part_index
+
+    if current_part_index > 0 do
+      # Move to previous part in current song
+      assign(socket, :current_part_index, current_part_index - 1)
+    else
+      # Move to last part of previous song
+      if current_song_index > 0 do
+        prev_song = Enum.at(songs, current_song_index - 1)
+
+        socket
+        |> assign(:current_song_index, current_song_index - 1)
+        |> assign(:current_part_index, length(prev_song.parts) - 1)
+      else
+        # Already at the beginning
+        socket
+      end
+    end
+  end
+
   defp update_display(socket) do
-    all_parts = socket.assigns.all_parts
-    current_index = socket.assigns.current_index
+    songs = socket.assigns.songs
+    current_song_index = socket.assigns.current_song_index
+    current_part_index = socket.assigns.current_part_index
 
-    current_part = Enum.at(all_parts, current_index)
-    prev_part = if current_index > 0, do: Enum.at(all_parts, current_index - 1), else: nil
+    current_part = get_part_at(songs, current_song_index, current_part_index)
+    prev_part = get_prev_part(songs, current_song_index, current_part_index)
+    next_part = get_next_part(songs, current_song_index, current_part_index)
 
-    next_part =
-      if current_index < length(all_parts) - 1,
-        do: Enum.at(all_parts, current_index + 1),
-        else: nil
-
-    # Calculate which song we're currently in based on the current part index
-    current_song_index = calculate_current_song_index(socket.assigns.songs, current_index)
+    # Calculate current index for display (1-based counting)
+    current_index = calculate_global_index(songs, current_song_index, current_part_index)
 
     broadcast_presentation_update(socket.assigns.set.id, current_part)
 
@@ -202,21 +235,57 @@ defmodule MobileWorshipWeb.SetLive.Present do
     |> assign(:current_part, current_part)
     |> assign(:prev_part, prev_part)
     |> assign(:next_part, next_part)
-    |> assign(:current_song_index, current_song_index)
+    |> assign(:current_index, current_index)
   end
 
-  defp calculate_current_song_index(songs, part_index) do
-    songs
-    |> Enum.with_index()
-    |> Enum.reduce_while(0, fn {song, song_idx}, acc_parts ->
-      parts_count = length(song.parts)
+  defp get_part_at(songs, song_index, part_index) do
+    case Enum.at(songs, song_index) do
+      nil ->
+        nil
 
-      if part_index < acc_parts + parts_count do
-        {:halt, song_idx}
+      song ->
+        case Enum.at(song.parts, part_index) do
+          nil -> nil
+          content -> %{song_name: song.name, content: content}
+        end
+    end
+  end
+
+  defp get_prev_part(songs, current_song_index, current_part_index) do
+    if current_part_index > 0 do
+      get_part_at(songs, current_song_index, current_part_index - 1)
+    else
+      if current_song_index > 0 do
+        prev_song = Enum.at(songs, current_song_index - 1)
+        get_part_at(songs, current_song_index - 1, length(prev_song.parts) - 1)
       else
-        {:cont, acc_parts + parts_count}
+        nil
       end
-    end)
+    end
+  end
+
+  defp get_next_part(songs, current_song_index, current_part_index) do
+    current_song = Enum.at(songs, current_song_index)
+
+    if current_song && current_part_index < length(current_song.parts) - 1 do
+      get_part_at(songs, current_song_index, current_part_index + 1)
+    else
+      if current_song_index < length(songs) - 1 do
+        get_part_at(songs, current_song_index + 1, 0)
+      else
+        nil
+      end
+    end
+  end
+
+  defp calculate_global_index(songs, current_song_index, current_part_index) do
+    # Count all parts in songs before the current song
+    parts_before =
+      songs
+      |> Enum.take(current_song_index)
+      |> Enum.reduce(0, fn song, acc -> acc + length(song.parts) end)
+
+    parts_before + current_part_index
   end
 
   defp broadcast_presentation_update(set_id, part) do
