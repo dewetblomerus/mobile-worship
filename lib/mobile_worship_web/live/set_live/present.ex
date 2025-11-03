@@ -167,7 +167,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
      |> update_display()}
   end
 
-  def handle_event("keydown", %{"key" => "ArrowRight"}, socket) do
+  def handle_event("keydown", %{"key" => key}, socket) when key in ["ArrowRight", " "] do
     handle_event("next", %{}, socket)
   end
 
