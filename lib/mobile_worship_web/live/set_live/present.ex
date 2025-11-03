@@ -35,75 +35,101 @@ defmodule MobileWorshipWeb.SetLive.Present do
             </.link>
           </div>
 
-          <div class="flex items-center justify-center gap-8">
-            <div class="flex flex-col items-center">
-              <%= if @prev_part do %>
-                <div class="text-sm font-semibold mb-2 text-base-content/60">
-                  {@prev_part.song_name}
+          <div class="flex gap-8">
+            <%!-- Song List Sidebar --%>
+            <div class="w-64 flex-shrink-0">
+              <div class="card bg-base-100 shadow-xl">
+                <div class="card-body p-4">
+                  <h2 class="card-title text-lg mb-2">Songs</h2>
+                  <ul class="menu menu-compact p-0">
+                    <li :for={{song, idx} <- Enum.with_index(@songs)}>
+                      <a
+                        phx-click="jump_to_song"
+                        phx-value-song-index={idx}
+                        class={[
+                          "text-sm",
+                          @current_song_index == idx && "active bg-primary text-primary-content"
+                        ]}
+                      >
+                        {song.name}
+                      </a>
+                    </li>
+                  </ul>
                 </div>
-                <div class="w-48 h-96 bg-base-100 rounded-lg shadow-lg p-6 flex items-center justify-center opacity-60">
-                  <div class="text-3xl leading-relaxed text-center">
-                    {@prev_part.content}
-                  </div>
-                </div>
-              <% else %>
-                <div class="w-48 h-96"></div>
-              <% end %>
+              </div>
             </div>
 
-            <div class="flex flex-col items-center">
-              <%= if @current_part do %>
-                <div class="text-xl font-bold mb-4">
-                  {@current_part.song_name}
-                </div>
-                <div class="w-72 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex flex-col items-center justify-center border-4 border-primary">
-                  <div class="flex flex-col items-center justify-center ">
-                    <div class="text-5xl leading-relaxed text-center">
-                      {@current_part.content}
+            <%!-- Slides Display --%>
+            <div class="flex-1 flex items-center justify-center gap-8">
+              <div class="flex flex-col items-center">
+                <%= if @prev_part do %>
+                  <div class="text-sm font-semibold mb-2 text-base-content/60">
+                    {@prev_part.song_name}
+                  </div>
+                  <div class="w-48 h-96 bg-base-100 rounded-lg shadow-lg p-6 flex items-center justify-center opacity-60">
+                    <div class="text-3xl leading-relaxed text-center">
+                      {@prev_part.content}
                     </div>
                   </div>
-                </div>
-              <% else %>
-                <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex items-center justify-center">
-                  <div class="text-center text-base-content/60">No parts in set</div>
-                </div>
-              <% end %>
-            </div>
+                <% else %>
+                  <div class="w-48 h-96"></div>
+                <% end %>
+              </div>
 
-            <div class="flex flex-col items-center">
-              <%= if @next_part do %>
-                <div class="text-sm font-semibold mb-2 text-base-content/60">
-                  {@next_part.song_name}
-                </div>
-                <div class="w-48 h-96 bg-base-100 rounded-lg shadow-lg p-6 flex items-center justify-center opacity-60">
-                  <div class="text-3xl leading-relaxed text-center">
-                    {@next_part.content}
+              <div class="flex flex-col items-center">
+                <%= if @current_part do %>
+                  <div class="text-xl font-bold mb-4">
+                    {@current_part.song_name}
                   </div>
-                </div>
-              <% else %>
-                <div class="w-48 h-96"></div>
-              <% end %>
-            </div>
-          </div>
+                  <div class="w-72 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex flex-col items-center justify-center border-4 border-primary">
+                    <div class="flex flex-col items-center justify-center ">
+                      <div class="text-5xl leading-relaxed text-center">
+                        {@current_part.content}
+                      </div>
+                    </div>
+                  </div>
+                <% else %>
+                  <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex items-center justify-center">
+                    <div class="text-center text-base-content/60">No parts in set</div>
+                  </div>
+                <% end %>
+              </div>
 
-          <div class="flex justify-center gap-4 mt-8">
-            <button
-              class="btn btn-lg btn-circle"
-              phx-click="prev"
-              disabled={@current_index == 0}
-            >
-              <.icon name="hero-arrow-left" class="w-8 h-8" />
-            </button>
-            <div class="flex items-center px-6 text-lg font-semibold">
-              {@current_index + 1} / {@total_parts}
+              <div class="flex flex-col items-center">
+                <%= if @next_part do %>
+                  <div class="text-sm font-semibold mb-2 text-base-content/60">
+                    {@next_part.song_name}
+                  </div>
+                  <div class="w-48 h-96 bg-base-100 rounded-lg shadow-lg p-6 flex items-center justify-center opacity-60">
+                    <div class="text-3xl leading-relaxed text-center">
+                      {@next_part.content}
+                    </div>
+                  </div>
+                <% else %>
+                  <div class="w-48 h-96"></div>
+                <% end %>
+              </div>
             </div>
-            <button
-              class="btn btn-lg btn-circle"
-              phx-click="next"
-              disabled={@current_index >= @total_parts - 1}
-            >
-              <.icon name="hero-arrow-right" class="w-8 h-8" />
-            </button>
+
+            <div class="flex justify-center gap-4 mt-8">
+              <button
+                class="btn btn-lg btn-circle"
+                phx-click="prev"
+                disabled={@current_index == 0}
+              >
+                <.icon name="hero-arrow-left" class="w-8 h-8" />
+              </button>
+              <div class="flex items-center px-6 text-lg font-semibold">
+                {@current_index + 1} / {@total_parts}
+              </div>
+              <button
+                class="btn btn-lg btn-circle"
+                phx-click="next"
+                disabled={@current_index >= @total_parts - 1}
+              >
+                <.icon name="hero-arrow-right" class="w-8 h-8" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -165,6 +191,16 @@ defmodule MobileWorshipWeb.SetLive.Present do
 
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
     handle_event("prev", %{}, socket)
+  end
+
+  def handle_event("jump_to_song", %{"song-index" => song_index_str}, socket) do
+    song_index = String.to_integer(song_index_str)
+
+    {:noreply,
+     socket
+     |> assign(:current_song_index, song_index)
+     |> assign(:current_part_index, 0)
+     |> update_display()}
   end
 
   def handle_event("keydown", _params, socket) do
