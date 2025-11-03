@@ -159,23 +159,6 @@ defmodule MobileWorship.Sets do
     end
   end
 
-  @doc """
-  Returns all parts from all songs in a set, flattened into a single list.
-
-  Each part is represented as a map with the song name and part content.
-
-  ## Examples
-
-      iex> get_set_parts(set, organization_id)
-      [%{song_name: "Song 1", content: "Verse 1..."}, ...]
-
-  """
-  def get_set_parts(%Set{} = set, organization_id) do
-    set
-    |> get_set_songs(organization_id)
-    |> Enum.flat_map(fn song -> flatten_song_parts(song) end)
-  end
-
   defp build_song_map(song_map, song_id) do
     case Map.get(song_map, song_id) do
       nil ->
@@ -188,14 +171,5 @@ defmodule MobileWorship.Sets do
           parts: song.parts || []
         }
     end
-  end
-
-  defp flatten_song_parts(song) do
-    Enum.map(song.parts, fn part ->
-      %{
-        song_name: song.name,
-        content: part
-      }
-    end)
   end
 end
