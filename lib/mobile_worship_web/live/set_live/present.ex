@@ -22,7 +22,9 @@ defmodule MobileWorshipWeb.SetLive.Present do
                 height="128"
               />
             </div>
-            <a href={@follow_url} target="_blank" class="link link-primary text-sm">Open follow page</a>
+            <a href={@follow_url} target="_blank" class="link link-primary text-sm">
+              Open follow page
+            </a>
           </div>
         <% end %>
         <div class="container mx-auto px-4">
@@ -55,11 +57,11 @@ defmodule MobileWorshipWeb.SetLive.Present do
                   {@current_part.song_name}
                 </div>
                 <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex flex-col items-center justify-center border-4 border-primary">
-                <div class= "flex flex-col items-center justify-center ">
-                  <div class="text-5xl leading-relaxed text-center">
-                    {@current_part.content}
+                  <div class="flex flex-col items-center justify-center ">
+                    <div class="text-5xl leading-relaxed text-center">
+                      {@current_part.content}
+                    </div>
                   </div>
-                </div>
                 </div>
               <% else %>
                 <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex items-center justify-center">
@@ -118,6 +120,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
       all_parts = Sets.get_set_parts(set, organization.id)
 
       follow_url = url(~p"/sets/#{set}/follow")
+
       qr_svg_base64 =
         follow_url
         |> QRCode.create()
