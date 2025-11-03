@@ -4,12 +4,27 @@ defmodule MobileWorshipWeb.SetLive.Present do
   alias MobileWorship.Accounts
   alias MobileWorship.PresentationCache
   alias MobileWorship.Sets
+  alias QRCode
 
   @impl true
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="min-h-screen bg-base-200 py-8" phx-window-keydown="keydown">
+        <%= if @qr_svg_base64 do %>
+          <div class="fixed right-4 top-20 z-10 flex flex-col items-center gap-2">
+            <div class="card bg-base-100 shadow-xl border border-base-200 p-3">
+              <img
+                src={"data:image/svg+xml;base64,#{@qr_svg_base64}"}
+                alt="Follow on your device"
+                class="w-32 h-32"
+                width="128"
+                height="128"
+              />
+            </div>
+            <a href={@follow_url} target="_blank" class="link link-primary text-sm">Open follow page</a>
+          </div>
+        <% end %>
         <div class="container mx-auto px-4">
           <div class="mb-8 flex items-center justify-between">
             <h1 class="text-3xl font-bold">{@set.name}</h1>
@@ -40,11 +55,11 @@ defmodule MobileWorshipWeb.SetLive.Present do
                   {@current_part.song_name}
                 </div>
                 <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex flex-col items-center justify-center border-4 border-primary">
-                  <div class="flex flex-col items-center justify-center ">
-                    <div class="text-5xl leading-relaxed text-center">
-                      {@current_part.content}
-                    </div>
+                <div class= "flex flex-col items-center justify-center ">
+                  <div class="text-5xl leading-relaxed text-center">
+                    {@current_part.content}
                   </div>
+                </div>
                 </div>
               <% else %>
                 <div class="w-64 h-[32rem] bg-base-100 rounded-lg shadow-2xl p-8 flex items-center justify-center">
@@ -102,12 +117,25 @@ defmodule MobileWorshipWeb.SetLive.Present do
 
       all_parts = Sets.get_set_parts(set, organization.id)
 
+      follow_url = url(~p"/sets/#{set}/follow")
+      qr_svg_base64 =
+        follow_url
+        |> QRCode.create()
+        |> QRCode.render(:svg)
+        |> QRCode.to_base64()
+        |> case do
+          {:ok, b64} -> b64
+          _ -> nil
+        end
+
       {:ok,
        socket
        |> assign(:set, set)
        |> assign(:all_parts, all_parts)
        |> assign(:current_index, 0)
        |> assign(:total_parts, length(all_parts))
+       |> assign(:follow_url, follow_url)
+       |> assign(:qr_svg_base64, qr_svg_base64)
        |> update_display()}
     else
       {:ok,
