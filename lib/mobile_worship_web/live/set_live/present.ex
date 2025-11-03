@@ -17,7 +17,7 @@ defmodule MobileWorshipWeb.SetLive.Present do
               <img
                 src={"data:image/svg+xml;base64,#{@qr_svg_base64}"}
                 alt="Follow on your device"
-                class="w-32 h-32"
+                class="w-60 h-60"
                 width="128"
                 height="128"
               />
