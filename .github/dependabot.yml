@@ -11,15 +11,29 @@ updates:
     patterns:
       - "*"
     multi-ecosystem-group: "all-dependencies"
+    reviewers:
+      - "dewetblomerus"
+
+  - package-ecosystem: "npm"
+    directory: "/assets"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "all-dependencies"
+    reviewers:
+      - "dewetblomerus"
 
   - package-ecosystem: "docker"
     directory: "/"
     patterns:
       - "*"
     multi-ecosystem-group: "all-dependencies"
+    reviewers:
+      - "dewetblomerus"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     patterns:
       - "*"
     multi-ecosystem-group: "all-dependencies"
+    reviewers:
+      - "dewetblomerus"
