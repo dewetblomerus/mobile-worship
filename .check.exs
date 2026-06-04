@@ -1,9 +1,6 @@
 [
-  ## Don't run tools concurrently
+  ## Run tools concurrently
   parallel: true,
-
-  ## Don't halt the check suite on first failure
-  halt_on_error: false,
 
   ## Tools list (alphabetically ordered)
   tools: [
@@ -12,6 +9,9 @@
 
     ## Credo (static code analysis)
     {:credo, "mix credo --strict"},
+
+    ## Check for unused dependencies
+    {:deps_unlock, "mix deps.unlock --check-unused"},
 
     ## Check code formatting
     {:formatter, "mix format --check-formatted"},
@@ -22,6 +22,7 @@
     {:doctor, false},
     {:ex_doc, false},
     {:gettext, false},
+    {:mix_audit, "mix deps.audit"},
     {:npm_test, false},
     {:sobelow, "mix sobelow --threshold medium"}
   ]

@@ -27,7 +27,7 @@ defmodule MobileWorship.MixProject do
 
   def cli do
     [
-      preferred_envs: [precommit: :test]
+      preferred_envs: [check: :test, precommit: :test]
     ]
   end
 
@@ -96,7 +96,7 @@ defmodule MobileWorship.MixProject do
         "esbuild mobile_worship --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: ["check"]
     ]
   end
 end
